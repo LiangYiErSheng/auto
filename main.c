@@ -81,7 +81,6 @@ int weight_detection(int weight){
          return 0;
      }
  }
-
 /**
  * 酒精检车模块，根据呼出气体中的含量判断是否饮酒驾驶
  * @param alcoholContent
