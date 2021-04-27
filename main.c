@@ -1,20 +1,20 @@
 /**
- * å•ç‰‡æœºæ™ºèƒ½é˜²é…’é©¾ç¨‹åº
+ * µ¥Æ¬»úÖÇÄÜ·À¾Æ¼İ³ÌĞò
  * @return
  */
-//å®šä¹‰ä½“é‡,ç”¨äºåˆ¤æ–­æ˜¯å¦æˆäºº
+//¶¨ÒåÌåÖØ,ÓÃÓÚÅĞ¶ÏÊÇ·ñ³ÉÈË
 int weight;
 
-//æˆäººä½“é‡æœ€ä½æ ‡å‡†
+//³ÉÈËÌåÖØ×îµÍ±ê×¼
 #define ADULT_WEIGHT 40
 
-//å®šä¹‰ç”µå¹³ï¼Œé«˜ç”µå¹³ä¸º1ï¼Œä½ç”µå¹³ä¸º0
+//¶¨ÒåµçÆ½£¬¸ßµçÆ½Îª1£¬µÍµçÆ½Îª0
 int level;
 
-//é…’ç²¾å«é‡
+//¾Æ¾«º¬Á¿
 double alcoholContent;
 
-//
+//×îĞ¡º¬Á¿£¬×î´óº¬Á¿
 #define MIN_DRINKING 0.2
 #define MAX_DRINKING 0.8
 
@@ -22,40 +22,76 @@ double alcoholContent;
 #include <math.h>
 #include <stdbool.h>
 #include <stdlib.h>
-//åˆå§‹åŒ–,å„ä¸ªå˜é‡å€¼
+//³õÊ¼»¯,¸÷¸ö±äÁ¿Öµ
 void init();
-//çº¢å¤–æ£€æµ‹æ¨¡å—
+//ºìÍâ¼ì²âÄ£¿é
 bool  infrared_detection(int level);
-//é‡é‡æ£€æµ‹
+//ÖØÁ¿¼ì²â
 int weight_detection(int weight);
-//é…’ç²¾æ£€æµ‹
+//¾Æ¾«¼ì²â
 int alcohol_testing(double alcoholContent);
-//å…è®¸å¯åŠ¨
-//æ–­å¼€åŠ¨ä½œ
-//æŠ¥è­¦æç¤º
+//ÔÊĞíÆô¶¯
+//¶Ï¿ª¶¯×÷
+//±¨¾¯ÌáÊ¾
 int main() {
+    //³õÊ¼»¯¸÷¸ö²ÎÊı
     init();
-    printf("Hello, World!\n");
+    system("title µ¥Æ¬»úÖÇÄÜ·À¾Æ¼İ³ÌĞò");
+    printf("ÇëÊäÈëµçÆ½²ÎÊı:\n");
+    scanf(" %d",&level);
+    //¶¨Òålevel_parameter£¬½ÓÊÜºìÍâ¼ì²âµÄ·µ»ØÖµ
+    bool level_parameter;
+    level_parameter=infrared_detection(level);
+
+    if(level_parameter == true){
+        printf("ÇëÊäÈëÌåÖØ(kg):\n");
+        scanf(" %d",&weight);
+        //¶¨Òåweight_param,½ÓÊÜÌåÖØ¼ì²âµÄ·µ»ØÖµ
+        int weight_param;
+        weight_param=weight_detection(weight);
+
+        if (weight_param == 1){
+            //¶¨Òåalcohol_param,½ÓÊÜ¾Æ¾«¼ì²â·µ»ØÖµ
+            int  alcohol_param;
+            printf("ÇëÊäÈë¾Æ¾«º¬Á¿(0~1):\n");
+            scanf(" %lf",&alcoholContent);
+            alcohol_param=alcohol_testing(alcoholContent);
+            if (alcohol_param == 0){
+                printf("Ã»ÓĞºÈ¾Æ!\n");
+            } else if (alcohol_param == 1){
+                printf("Òû¾Æ¼İÊ»!\n");
+            } else{
+                printf("×í¼İ!\n");
+            }
+        } else if (weight_param == 0){
+            printf("³µÄÚÎŞÈË!\n");
+        } else{
+            printf("³µÄÚÎª¶ùÍ¯»òÕßÆäËû!\n");
+        }
+    } else if(level_parameter == false){
+        printf("³µÄÚÃ»ÓĞÈË!\n");
+    }
+    system("pause");
     return 0;
 }
 
 /**
- * åˆå§‹åŒ–å„ä¸ªå‚æ•°çš„å€¼
+ * ³õÊ¼»¯¸÷¸ö²ÎÊıµÄÖµ
  * @return
  */
 void init(){
-    //åˆå§‹åŒ–ä½“é‡ä¸º0
+    //³õÊ¼»¯ÌåÖØÎª0
     weight = 0;
-    //ç”µå¹³å€¼ä¸º0
+    //µçÆ½ÖµÎª0
     level = 0;
-    //é…’ç²¾å«é‡ä¸º0
+    //¾Æ¾«º¬Á¿Îª0
     alcoholContent = 0;
 }
 
 /**
- * çº¢å¤–æ£€æµ‹æ¨¡å—ï¼Œæ ¹æ®é«˜ä½ç”µå¹³åˆ¤æ–­æ˜¯å¦æœ‰äºº
+ * ºìÍâ¼ì²âÄ£¿é£¬¸ù¾İ¸ßµÍµçÆ½ÅĞ¶ÏÊÇ·ñÓĞÈË
  * @param level
- * @return true æœ‰äºº ,@return 0 æ— äºº,å…¶ä»–ç”µå¹³ç»“æŸç¨‹åº
+ * @return true ÓĞÈË ,@return 0 ÎŞÈË,ÆäËûµçÆ½½áÊø³ÌĞò
  */
  bool infrared_detection(int level){
      if ( level == 1){
@@ -68,9 +104,9 @@ void init(){
  }
 
  /**
- * é‡é‡æ£€æµ‹æ¨¡å—ï¼Œæ ¹æ®ä½“é‡åˆ¤æ–­æ˜¯å¦è¾¾åˆ°æˆäººæ ‡å‡†
+ * ÖØÁ¿¼ì²âÄ£¿é£¬¸ù¾İÌåÖØÅĞ¶ÏÊÇ·ñ´ïµ½³ÉÈË±ê×¼
   * @param weight
-  * @return 1 æˆå¹´äººï¼Œ0æ²¡æœ‰äººï¼Œ-1 å„¿ç«¥æˆ–è€…å…¶ä»–ç‰©ä½“
+  * @return 1 ³ÉÄêÈË£¬0Ã»ÓĞÈË£¬-1 ¶ùÍ¯»òÕßÆäËûÎïÌå
  */
 int weight_detection(int weight){
      if (weight >= ADULT_WEIGHT){
@@ -82,9 +118,9 @@ int weight_detection(int weight){
      }
  }
 /**
- * é…’ç²¾æ£€è½¦æ¨¡å—ï¼Œæ ¹æ®å‘¼å‡ºæ°”ä½“ä¸­çš„å«é‡åˆ¤æ–­æ˜¯å¦é¥®é…’é©¾é©¶
+ * ¾Æ¾«¼ì³µÄ£¿é£¬¸ù¾İºô³öÆøÌåÖĞµÄº¬Á¿ÅĞ¶ÏÊÇ·ñÒû¾Æ¼İÊ»
  * @param alcoholContent
- * @return 0 æ²¡æœ‰é…’é©¾ï¼Œ1 é¥®é…’é©¾é©¶ï¼Œ -1 é†‰é©¾
+ * @return 0 Ã»ÓĞ¾Æ¼İ£¬1 Òû¾Æ¼İÊ»£¬ -1 ×í¼İ
  */
 int alcohol_testing(double alcoholContent){
     if (alcoholContent <MIN_DRINKING){
